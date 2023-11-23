@@ -1,0 +1,223 @@
+// :root {
+// 	--background-color: #efeef9;
+// 	--text-color: #38363C;
+// 	--link-color: #0645ad;
+// }
+// @media (prefers-color-scheme: dark) {
+// 	:root {
+// 		--background-color: #2D2B30;
+// 		--text-color: #f6f8ff;
+// 		--link-color: #72a1eb;
+// 	}
+// }
+
+body {
+	font-size: 12px;
+	background: var(--background-color);
+	color: var(--text-color);
+}
+a {
+	color: var(--link-color);
+}
+// img {
+// 	max-width: 1rem;
+// 	max-height: 1rem;
+// }
+img.icon {
+	margin: 3px;
+}
+
+img.smIcon {
+	max-width: 0.5rem;
+	max-height: 0.5rem;
+}
+
+.configuration {
+	.filterOptions {
+		.filterOption {
+			input,
+			label {
+				cursor: pointer;
+			}
+		}
+		.shown {
+			background: papayawhip;
+		}
+		img {
+			max-width: 1rem;
+			max-height: 1rem;
+		}
+
+		.Sun {
+			background: rgb(247, 247, 228);
+		}
+		.Rain {
+			background: rgb(224, 247, 247);
+		}
+		.Snow {
+			background: rgb(231, 247, 249);
+		}
+		.Storm {
+			background: rgb(234, 234, 234);
+		}
+		.Wind {
+			background: rgb(251, 235, 237);
+		}
+	}
+}
+.seasonalDisplay {
+	.season {
+		.seasonTimeline {
+		}
+	}
+}
+.cell {
+	border: 1px solid #e7eafa;
+
+	&.cellHeader {
+		font-weight: bold;
+		display: flex;
+		align-items: end;
+	}
+
+	&.fishCell {
+		opacity: 0.7;
+		text-align: center;
+
+		&.first-child {
+			opacity: 1;
+			text-align: left;
+			padding: 0 2px;
+		}
+		&.checkCell {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.form-check {
+				min-height: auto;
+				margin: 0;
+				padding: 0;
+
+				input {
+					margin: 0;
+					padding: 0;
+				}
+			}
+		}
+
+		&.alt {
+			opacity: 1;
+			background: #f0f2ff;
+			border: 1px solid #d4d8ef;
+			border-left-width: 0;
+		}
+		&.alt.first-child {
+			border-left-width: 1px;
+		}
+
+		&.caught.first-child {
+			opacity: 0.5;
+		}
+		&.caught {
+			opacity: 0.3;
+			background: #f2f4ff;
+		}
+		&.caught.alt {
+			opacity: 0.5;
+			background: #e2e5ff;
+		}
+
+		.weather {
+			img {
+				width: 100%;
+				margin: 0 auto;
+				max-width: 1rem;
+				max-height: 1rem;
+			}
+
+			.Sun {
+				background: rgb(247, 247, 228);
+
+				&.included {
+					background: rgb(238, 232, 170); // palegoldenrod
+				}
+			}
+
+			.Rain {
+				background: rgb(224, 247, 247);
+
+				&.included {
+					background: rgb(175, 238, 238); // paleturquoise
+				}
+			}
+
+			.Snow {
+				background: rgb(231, 247, 249);
+
+				&.included {
+					background: rgb(176, 224, 230); // powderblue
+				}
+			}
+
+			.Storm {
+				background: rgb(234, 234, 234);
+
+				&.included {
+					background: rgb(192, 192, 192); // silver
+				}
+			}
+
+			.Wind {
+				background: rgb(251, 235, 237);
+
+				&.included {
+					background: rgb(255, 192, 203); // pink
+				}
+			}
+		}
+	}
+
+	&.cropCell {
+		.seed,
+		.crop {
+			max-width: 20px;
+			max-height: 20px;
+		}
+
+		.date {
+			background: #e9e9f4;
+			font-weight: bold;
+			padding: 1px 5px;
+		}
+	}
+}
+
+$border-width: 1px;
+$border-color: red;
+$border: $border-width solid $border-color;
+$vertical-padding: 1rem;
+$horizontal-padding: 0.5rem;
+$cell-padding: $vertical-padding $horizontal-padding;
+.bordered {
+	border: $border;
+	border-right: 0;
+	border-bottom: 0;
+	width: 100%;
+	border-spacing: 0px;
+
+	th,
+	td {
+		position: relative;
+		box-sizing: border-box;
+		padding: 0;
+
+		padding: $cell-padding;
+		white-space: normal;
+		word-break: break-word;
+		border: $border;
+		border-top: 0;
+		border-left: 0;
+		transition: box-shadow 0.3s;
+	}
+}
