@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import "./App.scss";
-import MenuAppBar from "./shared/navigation/MenuAppBar";
+import MenuAppBar from "./navigation/MenuAppBar";
 import Container from "@mui/material/Container";
 import { Box } from "@mui/material";
 

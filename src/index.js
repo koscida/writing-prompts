@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import App from "./components/App";
-import navigationLinks from "./components/shared/navigation/navigationLinks";
+import navigationLinks from "./components/navigation/navigationLinks";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,9 +14,15 @@ root.render(
 					<Route path="/" element={<App />}>
 						{Object.entries(navigationLinks).map(
 							([sectionLabel, navigationLinks]) =>
-								navigationLinks.map(({ label, to, element }) => (
-									<Route key={label} path={to} element={element} />
-								))
+								navigationLinks.map(
+									({ label, to, element }) => (
+										<Route
+											key={label}
+											path={to}
+											element={element}
+										/>
+									)
+								)
 						)}
 					</Route>
 				</Routes>
