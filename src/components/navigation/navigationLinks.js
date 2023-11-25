@@ -1,15 +1,14 @@
-import Home from "../views/pages/Home";
+import HomeController from "../controllers/HomeController";
 import PromptsController from "../controllers/PromptsController";
 import TagsController from "../controllers/TagsController";
 import CharactersController from "../controllers/CharactersController";
-import { CharacterModel, PromptModel, TagModel } from "../models/ItemModels";
 
 const navigationLinks = {
 	Home: [
 		{
 			to: "/",
 			label: "Home",
-			element: <Home />,
+			element: <HomeController />,
 		},
 	],
 	Edit: [
