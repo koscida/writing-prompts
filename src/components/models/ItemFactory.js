@@ -5,8 +5,11 @@ export default function ItemFactory({ model, tagModel = null, view }) {
 	// ////
 	// variables
 
-	const [list, setList] = useLocalStorage(model.storageKey, {});
-	const [tagList, setTagList] = useLocalStorage(tagModel.storageKey, {});
+	const [list, setList] = useLocalStorage(model.getStorageKey(), {});
+	const [tagList, setTagList] = useLocalStorage(
+		tagModel ? tagModel.getStorageKey() : "",
+		{}
+	);
 
 	// ////
 	// handlers

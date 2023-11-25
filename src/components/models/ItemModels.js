@@ -10,17 +10,21 @@ import { v4 as uuidv4 } from "uuid";
 //	parent
 
 class ItemModel {
+	type = "generic";
+	getStorageKey = () => `writingPrompts-${this.type}`;
+
 	init = () => ({ id: uuidv4(), name: "" });
 	initWithTags = (tagList) => ({
 		...this.init(),
 		...Object.values(tagList)
+			.filter((tag) => tag.association.includes(this.type))
 			.map((tag) => [tag.name, []])
 			.reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {}),
 	});
 
 	processValue = (name, value) => {
-		if (this.getDataModel[name])
-			return this.getDataModel[name.processData](value);
+		const m = this.getDataModel()[name];
+		if (m && m.processData) return m.processData(value);
 		return value;
 	};
 
@@ -56,8 +60,8 @@ export class CharacterModel extends ItemModel {
 	constructor(tagModel) {
 		super();
 		this.tagModel = tagModel;
+		this.type = "character";
 	}
-	storageKey = "writingPrompts-characters";
 
 	homeElement = CharactersHome;
 }
@@ -68,8 +72,8 @@ export class PromptModel extends ItemModel {
 	constructor(tagModel) {
 		super();
 		this.tagModel = tagModel;
+		this.type = "prompt";
 	}
-	storageKey = "writingPrompts-prompts";
 
 	homeElement = PromptsHome;
 
@@ -86,7 +90,7 @@ export class PromptModel extends ItemModel {
 // //
 // TagModel
 export class TagModel extends ItemModel {
-	storageKey = "writingPrompts-tags";
+	type = "tag";
 
 	homeElement = TagsHome;
 

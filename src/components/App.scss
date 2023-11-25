@@ -1,3 +1,7 @@
+.MuiPaper-root {
+	padding: 0.5rem;
+}
+
 .page {
 	> * {
 		padding: 0.5rem;
@@ -40,6 +44,23 @@
 		margin-left: 0.5rem;
 		&:first-child {
 			margin-left: 0;
+		}
+	}
+}
+
+.listEditRow {
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	justify-content: center;
+
+	> * {
+		margin-left: 0.5rem;
+		&:first-child {
+			margin-left: 0;
+		}
+		&:first-child {
+			flex-grow: 2;
 		}
 	}
 }

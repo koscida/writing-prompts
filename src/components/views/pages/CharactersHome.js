@@ -29,8 +29,8 @@ export default function CharactersHome({
 
 			<Divider />
 
-			<Paper className="listItem">
-				<Box>
+			<Box className="listEditRow">
+				<Paper>
 					<h3>Add Character</h3>
 
 					<ListItemView
@@ -39,15 +39,15 @@ export default function CharactersHome({
 						itemData={model.initWithTags(tagList)}
 						handleUpdateItem={handleAddItem}
 					/>
-				</Box>
-				<Box>
+				</Paper>
+				<Paper>
 					<h3>Clear Characters</h3>
 					<ItemClear
 						handleClear={handleClearList}
 						label={"characters"}
 					/>
-				</Box>
-			</Paper>
+				</Paper>
+			</Box>
 		</Box>
 	);
 }

@@ -15,10 +15,12 @@ export default function ListItemView({
 	const [localItemData, setLocalItemData] = useState(itemData);
 
 	const modelFields = model.getModelFields();
-	const tagListByName = Object.values(tagList).reduce(
-		(obj, tag) => ({ ...obj, [tag.name]: tag }),
-		{}
-	);
+	const tagListByName = tagList
+		? Object.values(tagList).reduce(
+				(obj, tag) => ({ ...obj, [tag.name]: tag }),
+				{}
+		  )
+		: {};
 
 	// effects
 
@@ -29,11 +31,11 @@ export default function ListItemView({
 	// handlers
 
 	const handleChange = (name, value) => {
-		// console.log("--handleChange-- name: ", name, " value: ", value);
-		setLocalItemData({
+		const newLocalItemData = {
 			...localItemData,
 			[name]: model.processValue(name, value),
-		});
+		};
+		setLocalItemData(newLocalItemData);
 	};
 
 	const handleClickSave = () => {
@@ -52,16 +54,21 @@ export default function ListItemView({
 		<Box className="listItem">
 			{localItemData.order ? <Box>{localItemData.order}</Box> : <></>}
 
-			{Object.entries(itemData).map(([name, dataValue], i) => {
+			{Object.keys(
+				tagList ? model.initWithTags(tagList) : model.init()
+			).map((name, i) => {
 				if (["id", "order"].includes(name))
 					return <React.Fragment key={i}></React.Fragment>;
 
+				// get field model from model
 				let fieldModel = modelFields[name];
+				// if no field model, then a tag, create tag field model here
 				if (!fieldModel) {
 					const options = tagListByName[name].options
 						.split("\n")
 						.map((option) => ({ label: option, value: option }));
 					// console.log("options: ", options);
+
 					fieldModel = {
 						label: name,
 						name,
@@ -70,6 +77,13 @@ export default function ListItemView({
 					};
 				}
 
+				// the value to display, pull from local item data or get a default
+				const value = localItemData[name]
+					? localItemData[name]
+					: fieldModel.kind === "checkbox"
+					? []
+					: "";
+
 				const MUIField =
 					fieldModel.kind === "textField"
 						? MUITextField
@@ -77,14 +91,13 @@ export default function ListItemView({
 						? MUICheckboxes
 						: fieldModel.kind === "listField"
 						? MUIListField
-						: MUICheckboxes;
+						: MUITextField;
 				return (
 					<Box key={i}>
 						<MUIField
-							key={`${i}-${name}`}
 							label={fieldModel.label}
 							name={fieldModel.name}
-							value={localItemData[name]}
+							value={value}
 							options={fieldModel.options}
 							handleChange={handleChange}
 						/>

@@ -27,8 +27,8 @@ export default function TagsHome({
 
 			<Divider />
 
-			<Paper className="listItem">
-				<Box>
+			<Box className="listEditRow">
+				<Paper>
 					<h3>Add Tag</h3>
 
 					<ListItemView
@@ -36,12 +36,12 @@ export default function TagsHome({
 						itemData={model.init()}
 						handleUpdateItem={handleAddItem}
 					/>
-				</Box>
-				<Box>
+				</Paper>
+				<Paper>
 					<h3>Clear Tags</h3>
 					<ItemClear handleClear={handleClearList} label={"tags"} />
-				</Box>
-			</Paper>
+				</Paper>
+			</Box>
 		</Box>
 	);
 }
