@@ -14,38 +14,41 @@ export default function PromptsHome({
 	handleClearList,
 }) {
 	return (
-		<Box className="page">
-			<Paper>
-				<h2>Prompts</h2>
+		<Box className="page flexRow">
+			<Box>
+				<Paper>
+					<h2>Prompts</h2>
 
-				<ListView
-					model={model}
-					list={list}
-					handleUpdateItem={handleUpdateItem}
-					handleDeleteItem={handleDeleteItem}
-				/>
-			</Paper>
-
-			<Divider />
-
-			<Paper className="flexRow">
-				<Box>
-					<h3>Add Prompt</h3>
-
-					<ListItemView
+					<ListView
 						model={model}
-						itemData={initListItem}
-						handleUpdateItem={handleAddItem}
+						list={list}
+						handleUpdateItem={handleUpdateItem}
+						handleDeleteItem={handleDeleteItem}
 					/>
-				</Box>
-				<Box>
-					<h3>Clear Prompts</h3>
-					<ItemClear
-						handleClear={handleClearList}
-						label={"prompts"}
-					/>
-				</Box>
-			</Paper>
+				</Paper>
+
+				<Divider />
+
+				<Paper className="flexRow">
+					<Box>
+						<h3>Add Prompt</h3>
+
+						<ListItemView
+							model={model}
+							itemData={initListItem}
+							handleUpdateItem={handleAddItem}
+						/>
+					</Box>
+					<Box>
+						<h3>Clear Prompts</h3>
+						<ItemClear
+							handleClear={handleClearList}
+							label={"prompts"}
+						/>
+					</Box>
+				</Paper>
+			</Box>
+			<Box></Box>
 		</Box>
 	);
 }

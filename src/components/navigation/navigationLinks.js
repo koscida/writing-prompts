@@ -1,5 +1,7 @@
 import Home from "../views/pages/Home";
-import ListsController from "../controllers/ListsController";
+import PromptsController from "../controllers/PromptsController";
+import TagsController from "../controllers/TagsController";
+import CharactersController from "../controllers/CharactersController";
 import { CharacterModel, PromptModel, TagModel } from "../models/ItemModels";
 
 const navigationLinks = {
@@ -14,18 +16,28 @@ const navigationLinks = {
 		{
 			to: "characters",
 			label: "Characters",
-			element: <ListsController model={new CharacterModel()} />,
+			element: (
+				<CharactersController
+					characterModel={new CharacterModel()}
+					tagModel={new TagModel()}
+				/>
+			),
 		},
 		{
 			to: "prompts",
 			label: "Prompts",
-			element: <ListsController model={new PromptModel()} />,
+			element: (
+				<PromptsController
+					promptModel={new PromptModel()}
+					tagModel={new TagModel()}
+				/>
+			),
 		},
 
 		{
 			to: "tags",
 			label: "Tags",
-			element: <ListsController model={new TagModel()} />,
+			element: <TagsController tagModel={new TagModel()} />,
 		},
 	],
 };

@@ -43,7 +43,7 @@ export default function ListItemView({
 		<Box className="listItem flexRow">
 			{localItemData.order ? <Box>{localItemData.order}</Box> : <></>}
 
-			{model.getDataModel().map((dataElement, i) => {
+			{Object.values(model.getModelFields()).map((dataElement, i) => {
 				const MUIField =
 					dataElement.kind === "textField"
 						? MUITextField

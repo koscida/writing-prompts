@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import useLocalStorage from "../data/useLocalStorage";
 
-export default function ListsController({ model }) {
+export default function ListsController({ model, tagModel = null }) {
 	// variables
 
 	const [list, setList] = useLocalStorage(model.storageKey, {});
@@ -12,7 +12,7 @@ export default function ListsController({ model }) {
 	const handleAddItem = (itemData) => {
 		// set the order to be at the last element
 		itemData["order"] = Object.values(list).length + 1;
-		console.log("--handleAddItem-- itemData: ", itemData);
+		// console.log("--handleAddItem-- itemData: ", itemData);
 
 		itemData = model.processData(itemData);
 
@@ -64,6 +64,7 @@ export default function ListsController({ model }) {
 		<>
 			<ListElement
 				model={model}
+				tagModel={tagModel}
 				list={list}
 				initListItem={initListItem}
 				handleUpdateItem={handleUpdateItem}

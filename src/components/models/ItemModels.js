@@ -6,12 +6,18 @@ import { v4 as uuidv4 } from "uuid";
 
 // ////
 // ItemModel
+//
 //	parent
 
 class ItemModel {
+	init = () => ({ id: uuidv4(), name: "" });
+
 	processValue = (name, value) => {
+		if (this.getDataModel[name])
+			return this.getDataModel[name.processData](value);
 		return value;
 	};
+
 	processData = (data) =>
 		Object.entries(data)
 			.map(([key, value]) => {
@@ -25,50 +31,63 @@ class ItemModel {
 				}),
 				{}
 			);
+
+	getDataModel = () => ({
+		name: { label: "Name", name: "name", kind: "textField" },
+	});
+
+	getModelFields = () => this.getDataModel();
 }
 
 // ////
 // Models
+//
 //	children
 
+// //
+// CharacterModel
 export class CharacterModel extends ItemModel {
 	storageKey = "writingPrompts-characters";
 
 	homeElement = CharactersHome;
-	init = () => ({ id: uuidv4(), name: "" });
 
-	getDataModel = () => [{ label: "Name", name: "name", kind: "textField" }];
+	// override
+	getModelFields = () => {
+		return { ...this.getDataModel() };
+	};
 }
 
+// //
+// PromptModel
 export class PromptModel extends ItemModel {
 	storageKey = "writingPrompts-prompts";
 
 	homeElement = PromptsHome;
-	init = () => ({ id: uuidv4(), name: "" });
 
-	getDataModel = () => [{ label: "Name", name: "name", kind: "textField" }];
+	// override
+	init = () => ({ id: uuidv4(), category: "", prompts: "" });
+
+	// override
+	getDataModel = () => ({
+		category: { label: "Category", name: "category", kind: "textField" },
+		prompts: { label: "Prompts", name: "prompts", kind: "listField" },
+	});
 }
 
+// //
+// TagModel
 export class TagModel extends ItemModel {
 	storageKey = "writingPrompts-tags";
 
 	homeElement = TagsHome;
+
+	// override
 	init = () => ({ id: uuidv4(), name: "", association: [], options: "" });
-	processValue = (name, value) => {
-		if (name === "options") {
-			console.log("options--- name: ", name, ", value: ", value);
-			if (typeof value === "string") {
-				console.log("replacing");
-				value = value.replace(/,/gi, "\n");
-			}
-		}
 
-		return value;
-	};
-
-	getDataModel = () => [
-		{ label: "Name", name: "name", kind: "textField" },
-		{
+	// override
+	getDataModel = () => ({
+		name: { label: "Name", name: "name", kind: "textField" },
+		association: {
 			label: "Association",
 			name: "association",
 			kind: "checkbox",
@@ -77,6 +96,17 @@ export class TagModel extends ItemModel {
 				{ label: "Prompt", value: "prompt" },
 			],
 		},
-		{ label: "Options", name: "options", kind: "listField" },
-	];
+		options: {
+			label: "Options",
+			name: "options",
+			kind: "listField",
+			processValue: (value) => {
+				console.log("options--- value: ", value);
+				if (typeof value === "string") {
+					console.log("replacing");
+					value = value.replace(/,/gi, "\n");
+				}
+			},
+		},
+	});
 }
