@@ -10,13 +10,26 @@
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
+
+	> * {
+		margin-left: 0.5rem;
+		&:first-child {
+			margin-left: 0;
+		}
+	}
 }
 
 .list {
 	.listItem {
 		display: flex;
 		flex-direction: row;
-		align-items: center;
+		align-items: start;
+		border-bottom: 1px solid #ddd;
+		padding-bottom: 0.5rem;
+		padding-top: 0.5rem;
+		&:last-child {
+			border-bottom: 0;
+		}
 
 		> * {
 			margin-left: 0.5rem;

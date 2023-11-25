@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, TextField } from "@mui/material";
 
-export default function MUITextField({
+export default function MUIListField({
 	label,
 	value,
 	name,
@@ -24,6 +24,9 @@ export default function MUITextField({
 			onChange={onChange}
 			size="small"
 			variant="outlined"
+			fullWidth
+			multiline
+			rows={6}
 			sx={{ ...styles, marginTop: "0.5rem", marginBottom: "0.5rem" }}
 		/>
 	);

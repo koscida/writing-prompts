@@ -1,7 +1,6 @@
 import Home from "../views/pages/Home";
-import Prompts from "../views/pages/Prompts";
-import Tags from "../views/pages/Tags";
-import CharacterController from "../controllers/CharacterController";
+import ListsController from "../controllers/ListsController";
+import { CharacterModel, PromptModel, TagModel } from "../models/ItemModels";
 
 const navigationLinks = {
 	Home: [
@@ -15,18 +14,18 @@ const navigationLinks = {
 		{
 			to: "characters",
 			label: "Characters",
-			element: <CharacterController />,
+			element: <ListsController model={new CharacterModel()} />,
 		},
 		{
 			to: "prompts",
 			label: "Prompts",
-			element: <Prompts />,
+			element: <ListsController model={new PromptModel()} />,
 		},
 
 		{
 			to: "tags",
 			label: "Tags",
-			element: <Tags />,
+			element: <ListsController model={new TagModel()} />,
 		},
 	],
 };

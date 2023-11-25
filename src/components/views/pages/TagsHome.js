@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Divider, Paper } from "@mui/material";
+import ItemClear from "../shared/ItemClear";
 import ListView from "../shared/ListView";
 import ListItemView from "../shared/ListItemView";
-import ItemClear from "../shared/ItemClear";
 
-export default function CharactersHome({
+export default function TagsHome({
 	model,
 	list,
 	initListItem,
@@ -16,7 +16,7 @@ export default function CharactersHome({
 	return (
 		<Box className="page">
 			<Paper>
-				<h2>Characters</h2>
+				<h2>Tags</h2>
 
 				<ListView
 					model={model}
@@ -30,7 +30,7 @@ export default function CharactersHome({
 
 			<Paper className="flexRow">
 				<Box>
-					<h3>Add Character</h3>
+					<h3>Add Tag</h3>
 
 					<ListItemView
 						model={model}
@@ -39,11 +39,8 @@ export default function CharactersHome({
 					/>
 				</Box>
 				<Box>
-					<h3>Clear Characters</h3>
-					<ItemClear
-						handleClear={handleClearList}
-						label={"characters"}
-					/>
+					<h3>Clear Tags</h3>
+					<ItemClear handleClear={handleClearList} label={"tags"} />
 				</Box>
 			</Paper>
 		</Box>
