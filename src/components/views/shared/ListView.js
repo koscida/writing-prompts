@@ -5,6 +5,7 @@ import ListItemView from "./ListItemView";
 export default function ListView({
 	model,
 	list,
+	tagList,
 	handleUpdateItem,
 	handleDeleteItem,
 }) {
@@ -17,11 +18,12 @@ export default function ListView({
 			{listArr && listArr.length > 0 ? (
 				listArr
 					.sort((a, b) => a.order > b.order)
-					.map((itemData) => (
+					.map((itemData, i) => (
 						<ListItemView
-							key={itemData.id}
+							key={`${itemData.id}-${i}`}
 							model={model}
 							itemData={itemData}
+							tagList={tagList}
 							handleUpdateItem={handleUpdateItem}
 							handleDeleteItem={handleDeleteItem}
 						/>

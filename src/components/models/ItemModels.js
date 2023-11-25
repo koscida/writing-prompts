@@ -11,6 +11,12 @@ import { v4 as uuidv4 } from "uuid";
 
 class ItemModel {
 	init = () => ({ id: uuidv4(), name: "" });
+	initWithTags = (tagList) => ({
+		...this.init(),
+		...Object.values(tagList)
+			.map((tag) => [tag.name, []])
+			.reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {}),
+	});
 
 	processValue = (name, value) => {
 		if (this.getDataModel[name])

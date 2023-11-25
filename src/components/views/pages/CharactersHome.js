@@ -7,6 +7,7 @@ import ItemClear from "../shared/ItemClear";
 export default function CharactersHome({
 	model,
 	list,
+	tagList,
 	handleUpdateItem,
 	handleDeleteItem,
 	handleAddItem,
@@ -20,6 +21,7 @@ export default function CharactersHome({
 				<ListView
 					model={model}
 					list={list}
+					tagList={tagList}
 					handleUpdateItem={handleUpdateItem}
 					handleDeleteItem={handleDeleteItem}
 				/>
@@ -33,7 +35,8 @@ export default function CharactersHome({
 
 					<ListItemView
 						model={model}
-						itemData={model.init()}
+						tagList={tagList}
+						itemData={model.initWithTags(tagList)}
 						handleUpdateItem={handleAddItem}
 					/>
 				</Box>

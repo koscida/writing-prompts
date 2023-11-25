@@ -7,6 +7,7 @@ import ItemClear from "../shared/ItemClear";
 export default function PromptsHome({
 	model,
 	list,
+	tagList,
 	handleUpdateItem,
 	handleDeleteItem,
 	handleAddItem,
@@ -21,6 +22,7 @@ export default function PromptsHome({
 					<ListView
 						model={model}
 						list={list}
+						tagList={tagList}
 						handleUpdateItem={handleUpdateItem}
 						handleDeleteItem={handleDeleteItem}
 					/>
@@ -34,7 +36,8 @@ export default function PromptsHome({
 
 						<ListItemView
 							model={model}
-							itemData={model.init()}
+							tagList={tagList}
+							itemData={model.initWithTags(tagList)}
 							handleUpdateItem={handleAddItem}
 						/>
 					</Box>

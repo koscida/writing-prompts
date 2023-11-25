@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Box } from "@mui/material";
 import MUITextField from "../../inputs/MUITextField";
 import MUICheckboxes from "../../inputs/MUICheckboxes";
@@ -8,10 +8,17 @@ import MUIButton from "../../inputs/MUIButton";
 export default function ListItemView({
 	model,
 	itemData,
+	tagList,
 	handleUpdateItem,
 	handleDeleteItem,
 }) {
 	const [localItemData, setLocalItemData] = useState(itemData);
+
+	const modelFields = model.getModelFields();
+	const tagListByName = Object.values(tagList).reduce(
+		(obj, tag) => ({ ...obj, [tag.name]: tag }),
+		{}
+	);
 
 	// effects
 
@@ -38,29 +45,47 @@ export default function ListItemView({
 	};
 
 	// render
-	if (!localItemData) return <></>;
+
+	if (!localItemData || !modelFields) return <></>;
 
 	return (
 		<Box className="listItem">
 			{localItemData.order ? <Box>{localItemData.order}</Box> : <></>}
 
-			{Object.values(model.getModelFields()).map((dataElement, i) => {
-				const MUIField =
-					dataElement.kind === "textField"
-						? MUITextField
-						: dataElement.kind === "checkbox"
-						? MUICheckboxes
-						: dataElement.kind === "listField"
-						? MUIListField
-						: MUITextField;
+			{Object.entries(itemData).map(([name, dataValue], i) => {
+				if (["id", "order"].includes(name))
+					return <React.Fragment key={i}></React.Fragment>;
 
+				let fieldModel = modelFields[name];
+				if (!fieldModel) {
+					const options = tagListByName[name].options
+						.split("\n")
+						.map((option) => ({ label: option, value: option }));
+					// console.log("options: ", options);
+					fieldModel = {
+						label: name,
+						name,
+						kind: "checkbox",
+						options,
+					};
+				}
+
+				const MUIField =
+					fieldModel.kind === "textField"
+						? MUITextField
+						: fieldModel.kind === "checkbox"
+						? MUICheckboxes
+						: fieldModel.kind === "listField"
+						? MUIListField
+						: MUICheckboxes;
 				return (
 					<Box key={i}>
 						<MUIField
-							label={dataElement.label}
-							name={dataElement.name}
-							value={localItemData[dataElement.name]}
-							options={dataElement.options}
+							key={`${i}-${name}`}
+							label={fieldModel.label}
+							name={fieldModel.name}
+							value={localItemData[name]}
+							options={fieldModel.options}
 							handleChange={handleChange}
 						/>
 					</Box>
