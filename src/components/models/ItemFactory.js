@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import useLocalStorage from "../data/useLocalStorage";
 
-export default function ListsController({ model, tagModel = null }) {
+export default function ItemFactory({ model, tagModel = null, view }) {
+	// ////
 	// variables
 
 	const [list, setList] = useLocalStorage(model.storageKey, {});
-	const [initListItem, setInitListItem] = useState(model.init());
+	const [tagList, setTagList] = useLocalStorage(tagModel.storageKey, {});
 
+	// ////
 	// handlers
 
 	const handleAddItem = (itemData) => {
@@ -21,8 +23,6 @@ export default function ListsController({ model, tagModel = null }) {
 			...list,
 			[itemData.id]: itemData,
 		});
-		// reset add new
-		setInitListItem(model.init());
 	};
 
 	const handleUpdateItem = (newCharacterData) => {
@@ -57,19 +57,20 @@ export default function ListsController({ model, tagModel = null }) {
 		setList({});
 	};
 
+	// ////
 	// render
-	const ListElement = model.homeElement;
+
+	const ViewElement = view;
 
 	return (
 		<>
-			<ListElement
+			<ViewElement
 				model={model}
-				tagModel={tagModel}
 				list={list}
-				initListItem={initListItem}
+				tagList={tagList}
+				handleAddItem={handleAddItem}
 				handleUpdateItem={handleUpdateItem}
 				handleDeleteItem={handleDeleteItem}
-				handleAddItem={handleAddItem}
 				handleClearList={handleClearList}
 			/>
 		</>

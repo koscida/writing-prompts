@@ -1,6 +1,17 @@
 import React from "react";
-import ListsController from "./ListsController";
+import PromptsHome from "../views/pages/PromptsHome";
+import { PromptModel, TagModel } from "../models/ItemModels";
+import ItemFactory from "../models/ItemFactory";
 
-export default function PromptsController({ promptModel, tagModel }) {
-	return <ListsController model={promptModel} tagModel={tagModel} />;
+export default function PromptsController() {
+	const tagModel = new TagModel();
+	const promptModel = new PromptModel();
+
+	return (
+		<ItemFactory
+			model={promptModel}
+			tagModel={tagModel}
+			view={PromptsHome}
+		/>
+	);
 }

@@ -1,6 +1,10 @@
 import React from "react";
-import ListsController from "./ListsController";
+import { TagModel } from "../models/ItemModels";
+import TagsHome from "../views/pages/TagsHome";
+import ItemFactory from "../models/ItemFactory";
 
-export default function TagsController({ tagModel }) {
-	return <ListsController model={tagModel} />;
+export default function TagsController() {
+	const tagModel = new TagModel();
+
+	return <ItemFactory model={tagModel} view={TagsHome} />;
 }

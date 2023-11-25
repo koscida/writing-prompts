@@ -7,7 +7,6 @@ import ItemClear from "../shared/ItemClear";
 export default function PromptsHome({
 	model,
 	list,
-	initListItem,
 	handleUpdateItem,
 	handleDeleteItem,
 	handleAddItem,
@@ -29,13 +28,13 @@ export default function PromptsHome({
 
 				<Divider />
 
-				<Paper className="flexRow">
+				<Paper className="listItem">
 					<Box>
 						<h3>Add Prompt</h3>
 
 						<ListItemView
 							model={model}
-							itemData={initListItem}
+							itemData={model.init()}
 							handleUpdateItem={handleAddItem}
 						/>
 					</Box>

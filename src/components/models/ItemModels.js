@@ -47,19 +47,22 @@ class ItemModel {
 // //
 // CharacterModel
 export class CharacterModel extends ItemModel {
+	constructor(tagModel) {
+		super();
+		this.tagModel = tagModel;
+	}
 	storageKey = "writingPrompts-characters";
 
 	homeElement = CharactersHome;
-
-	// override
-	getModelFields = () => {
-		return { ...this.getDataModel() };
-	};
 }
 
 // //
 // PromptModel
 export class PromptModel extends ItemModel {
+	constructor(tagModel) {
+		super();
+		this.tagModel = tagModel;
+	}
 	storageKey = "writingPrompts-prompts";
 
 	homeElement = PromptsHome;

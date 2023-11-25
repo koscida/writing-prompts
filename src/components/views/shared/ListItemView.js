@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import MUITextField from "../../inputs/MUITextField";
 import MUICheckboxes from "../../inputs/MUICheckboxes";
 import MUIListField from "../../inputs/MUIListField";
+import MUIButton from "../../inputs/MUIButton";
 
 export default function ListItemView({
 	model,
@@ -40,7 +41,7 @@ export default function ListItemView({
 	if (!localItemData) return <></>;
 
 	return (
-		<Box className="listItem flexRow">
+		<Box className="listItem">
 			{localItemData.order ? <Box>{localItemData.order}</Box> : <></>}
 
 			{Object.values(model.getModelFields()).map((dataElement, i) => {
@@ -67,20 +68,16 @@ export default function ListItemView({
 			})}
 
 			<Box>
-				<Button
+				<MUIButton
+					label={"Save"}
 					onClick={handleClickSave}
-					variant="outlined"
 					disabled={localItemData === itemData}
-				>
-					Save
-				</Button>
+				/>
 			</Box>
 
 			{handleDeleteItem ? (
 				<Box>
-					<Button onClick={handleClickDelete} variant="outlined">
-						Delete
-					</Button>
+					<MUIButton label={"Delete"} onClick={handleClickDelete} />
 				</Box>
 			) : (
 				<></>

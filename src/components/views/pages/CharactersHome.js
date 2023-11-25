@@ -7,7 +7,6 @@ import ItemClear from "../shared/ItemClear";
 export default function CharactersHome({
 	model,
 	list,
-	initListItem,
 	handleUpdateItem,
 	handleDeleteItem,
 	handleAddItem,
@@ -28,13 +27,13 @@ export default function CharactersHome({
 
 			<Divider />
 
-			<Paper className="flexRow">
+			<Paper className="listItem">
 				<Box>
 					<h3>Add Character</h3>
 
 					<ListItemView
 						model={model}
-						itemData={initListItem}
+						itemData={model.init()}
 						handleUpdateItem={handleAddItem}
 					/>
 				</Box>

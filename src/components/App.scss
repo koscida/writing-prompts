@@ -8,7 +8,7 @@
 .flexRow {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 
 	> * {
@@ -21,21 +21,25 @@
 
 .list {
 	.listItem {
-		display: flex;
-		flex-direction: row;
-		align-items: start;
 		border-bottom: 1px solid #ddd;
 		padding-bottom: 0.5rem;
 		padding-top: 0.5rem;
+
 		&:last-child {
 			border-bottom: 0;
 		}
+	}
+}
+.listItem {
+	display: flex;
+	flex-direction: row;
+	align-items: start;
+	justify-content: space-around;
 
-		> * {
-			margin-left: 0.5rem;
-			&:first-child {
-				margin-left: 0;
-			}
+	> * {
+		margin-left: 0.5rem;
+		&:first-child {
+			margin-left: 0;
 		}
 	}
 }

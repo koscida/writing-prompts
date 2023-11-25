@@ -7,7 +7,6 @@ import ListItemView from "../shared/ListItemView";
 export default function TagsHome({
 	model,
 	list,
-	initListItem,
 	handleUpdateItem,
 	handleDeleteItem,
 	handleAddItem,
@@ -28,13 +27,13 @@ export default function TagsHome({
 
 			<Divider />
 
-			<Paper className="flexRow">
+			<Paper className="listItem">
 				<Box>
 					<h3>Add Tag</h3>
 
 					<ListItemView
 						model={model}
-						itemData={initListItem}
+						itemData={model.init()}
 						handleUpdateItem={handleAddItem}
 					/>
 				</Box>
