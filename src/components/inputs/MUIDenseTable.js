@@ -12,32 +12,57 @@ export default function MUIDenseTable({ columns, rows }) {
 	return (
 		<Paper sx={{ padding: 0 }}>
 			<TableContainer>
-				<table
-					style={{
-						width: "100%",
-						borderCollapse: "collapse",
-						borderSpacing: "0px",
-					}}
-				>
+				<style>{`
+        .denseTable {
+			width: 100%;
+			border-collapse: collapse;
+			border-spacing: 0px;
+			font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+
+			thead {display: table-header-group;}
+			tbody {display: table-row-group;}
+
+			tr {
+				color: inherit;
+				display: table-row;
+				vertical-align: middle;
+				outline: 0px;
+
+				td, th {
+					border-bottom: 1px solid rgb(224, 224, 224);
+					font-size: 0.875rem;
+					line-height: 1.25rem;
+					padding: 6px 16px;
+					color: rgba(0, 0, 0, 0.87);
+					display: table-cell;
+  					vertical-align: inherit;
+				}
+				th {
+					text-align: left;
+					font-weight: bold;
+					letter-spacing: 0.01071em;
+				}
+				td {
+					font-weight: 400;
+				}
+			}
+			tbody tr:last-child td {
+				border-bottom: 0;
+			}
+			
+        }
+    `}</style>
+				<table className="denseTable">
 					<thead>
 						<tr>
 							{columns.map((column, i) => (
-								<th key={i} style={{ textAlign: "left" }}>
-									{column.headerName}
-								</th>
+								<th key={i}>{column.headerName}</th>
 							))}
 						</tr>
 					</thead>
 					<tbody>
 						{rows.map((row, i) => (
-							<tr
-								key={i}
-								style={{
-									"&:last-child td, &:last-child th": {
-										border: 0,
-									},
-								}}
-							>
+							<tr key={i}>
 								{columns.map((column, j) => {
 									const value = row[column.field];
 									const cellValue = (
@@ -52,26 +77,22 @@ export default function MUIDenseTable({ columns, rows }) {
 													? value
 															.split("\n")
 															.map((line, i) => (
-																<p key={i}>
+																<span
+																	key={i}
+																	style={{
+																		display:
+																			"block",
+																	}}
+																>
 																	{line}
-																</p>
+																</span>
 															))
 													: value
 												: value}
 										</p>
 									);
 
-									return (
-										<td
-											key={j}
-											style={{
-												borderBottom:
-													"1px solid rgb(81, 81, 81)",
-											}}
-										>
-											{cellValue}
-										</td>
-									);
+									return <td key={j}>{cellValue}</td>;
 								})}
 							</tr>
 						))}

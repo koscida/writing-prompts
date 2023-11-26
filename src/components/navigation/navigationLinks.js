@@ -13,16 +13,15 @@ const navigationLinks = {
 	],
 	Edit: [
 		{
-			to: "characters",
-			label: "Characters",
-			element: <CharactersController />,
-		},
-		{
 			to: "prompts",
 			label: "Prompts",
 			element: <PromptsController />,
 		},
-
+		{
+			to: "characters",
+			label: "Characters",
+			element: <CharactersController />,
+		},
 		{
 			to: "tags",
 			label: "Tags",

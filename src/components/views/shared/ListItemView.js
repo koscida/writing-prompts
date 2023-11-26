@@ -105,21 +105,25 @@ export default function ListItemView({
 				);
 			})}
 
-			<Box>
-				<MUIButton
-					label={"Save"}
-					onClick={handleClickSave}
-					disabled={localItemData === itemData}
-				/>
-			</Box>
-
-			{handleDeleteItem ? (
+			<Box className="flexColumn">
 				<Box>
-					<MUIButton label={"Delete"} onClick={handleClickDelete} />
+					<MUIButton
+						label={"Save"}
+						onClick={handleClickSave}
+						disabled={localItemData === itemData}
+					/>
 				</Box>
-			) : (
-				<></>
-			)}
+				{handleDeleteItem ? (
+					<Box>
+						<MUIButton
+							label={"Delete"}
+							onClick={handleClickDelete}
+						/>
+					</Box>
+				) : (
+					<></>
+				)}
+			</Box>
 		</Box>
 	);
 }
