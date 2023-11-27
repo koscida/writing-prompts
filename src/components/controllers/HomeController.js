@@ -36,10 +36,11 @@ export default function HomeController() {
 	// tag data
 	const getTags = (tagAssociation) =>
 		Object.values(tagList)
-			.filter((tag) => tag.association.includes(tagAssociation))
+			.filter((tag) => tag.association === tagAssociation)
 			.reduce((tags, tag) => [...tags, tag.name], []);
-	const characterTags = getTags("character");
-	const promptTags = getTags("prompt");
+	const characterTags = getTags("Character");
+	const promptTags = getTags("Prompt");
+	console.log("characterTags: ", characterTags, ", promptTags: ", promptTags);
 
 	// get table data
 	const characterTableData = characterModel.transformToTableData(

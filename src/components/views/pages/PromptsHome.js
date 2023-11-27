@@ -13,6 +13,7 @@ export default function PromptsHome({
 	handleAddItem,
 	handleClearList,
 }) {
+	// console.log("--PromptsHome-- tagList: ", tagList);
 	return (
 		<Box className="page">
 			<Paper>

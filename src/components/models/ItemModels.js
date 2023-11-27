@@ -12,17 +12,21 @@ import PromptResults from "../views/shared/PromptResults";
 
 class ItemModel {
 	// properties
+	label = "Generic";
 	type = "generic";
 	getStorageKey = () => `writingPrompts-${this.type}`;
 
 	// init a new model
 	init = () => ({ id: uuidv4(), name: "" });
-	initWithTags = (tagList) => ({
-		...this.init(),
+	initTags = (tagList) => ({
 		...Object.values(tagList)
-			.filter((tag) => tag.association.includes(this.type))
+			.filter((tag) => tag.association === this.label)
 			.map((tag) => [tag.name, []])
 			.reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {}),
+	});
+	initWithTags = (tagList) => ({
+		...this.init(),
+		...this.initTags(tagList),
 	});
 
 	// process values after submission
@@ -54,7 +58,10 @@ class ItemModel {
 	// table transformation
 	getTableHeaders = (tagData) => [
 		{ field: "order", headerName: "#" },
-		{ field: "name", headerName: "Name" },
+		...Object.values(this.getDataModel()).map((dataRow) => ({
+			field: dataRow.name,
+			headerName: dataRow.label,
+		})),
 		...tagData.map((tag) => ({ field: tag, headerName: tag })),
 	];
 	transformToTableData = (listData, tagData = []) => {
@@ -63,7 +70,7 @@ class ItemModel {
 	};
 }
 
-// helper
+// table helper
 
 const generateRows = (list, headers) =>
 	Object.values(list).map((listItem) =>
@@ -101,14 +108,6 @@ export class PromptModel extends ItemModel {
 		category: { label: "Category", name: "category", kind: "textField" },
 		prompts: { label: "Prompts", name: "prompts", kind: "listField" },
 	});
-
-	// override
-	getTableHeaders = (tagData) => [
-		{ field: "order", headerName: "#" },
-		{ field: "category", headerName: "Category" },
-		{ field: "prompts", headerName: "Prompts" },
-		...tagData.map((tag) => ({ field: tag, headerName: tag })),
-	];
 }
 
 // //
@@ -134,20 +133,17 @@ export class TagModel extends ItemModel {
 	homeElement = TagsHome;
 
 	// override
-	init = () => ({ id: uuidv4(), name: "", association: [], options: "" });
+	init = () => ({
+		id: uuidv4(),
+		name: "",
+		options: "",
+		association: [],
+		relation: [],
+	});
 
 	// override
 	getDataModel = () => ({
 		name: { label: "Name", name: "name", kind: "textField" },
-		association: {
-			label: "Association",
-			name: "association",
-			kind: "checkbox",
-			options: [
-				{ label: "Character", value: "character" },
-				{ label: "Prompt", value: "prompt" },
-			],
-		},
 		options: {
 			label: "Options",
 			name: "options",
@@ -160,15 +156,37 @@ export class TagModel extends ItemModel {
 				}
 			},
 		},
+		association: {
+			label: "Association",
+			name: "association",
+			kind: "radio",
+			options: [
+				{ label: "Character", value: "Character" },
+				{ label: "Prompt", value: "Prompt" },
+				{
+					label: "None",
+					value: "None",
+				},
+			],
+			limitations: {
+				None: {
+					type: "nullDataOnOptionSelect",
+					option: "None",
+					field: "relation",
+					value: "generator",
+				},
+			},
+		},
+		relation: {
+			label: "Relation",
+			name: "relation",
+			kind: "radio",
+			options: [
+				{ label: "Tag Only", value: "tag" },
+				{ label: "Include in Generation", value: "generator" },
+			],
+		},
 	});
-
-	// override
-	getTableHeaders = (tagData) => [
-		{ field: "order", headerName: "#" },
-		{ field: "name", headerName: "Name" },
-		{ field: "association", headerName: "Association" },
-		{ field: "options", headerName: "Options" },
-	];
 }
 
 // ////
