@@ -32,7 +32,7 @@ export default function MUIRadios({
 					<FormControlLabel
 						key={i}
 						value={option.value}
-						control={<Radio />}
+						control={<Radio size="small" />}
 						label={option.label}
 					/>
 				))}

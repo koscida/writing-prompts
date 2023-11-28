@@ -37,6 +37,7 @@ export default function MUICheckboxes({
 								checked={value.includes(option.value)}
 								onChange={onChange}
 								name={option.value}
+								size="small"
 							/>
 						}
 						label={option.label}

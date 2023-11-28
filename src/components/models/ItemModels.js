@@ -5,6 +5,8 @@ import PromptsHome from "../views/pages/PromptsHome";
 import { v4 as uuidv4 } from "uuid";
 import PromptResults from "../views/shared/PromptResults";
 
+/////////////////////////////////////////////////////////////////////
+
 // table helper
 
 const generateRows = (list, headers) =>
@@ -46,6 +48,7 @@ class ItemModel extends DataModel {
 	// properties
 	uri = "#";
 
+	//
 	// init a new model (will not include order)
 	init = (itemDataModel = null) => ({
 		id: uuidv4(),
@@ -65,7 +68,11 @@ class ItemModel extends DataModel {
 	});
 	initTags = (tagList) => ({
 		...Object.values(tagList)
-			.filter((tag) => tag.association === this.label)
+			.filter(
+				(tag) =>
+					tag.association === this.label ||
+					tag.association.includes(this.label)
+			)
 			.map((tag) => [tag.name, []])
 			.reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {}),
 	});
@@ -74,6 +81,7 @@ class ItemModel extends DataModel {
 		...this.initTags(tagList),
 	});
 
+	//
 	// process values after submission
 	processValue = (name, value) => {
 		const m = this.getDataModel()[name];
@@ -87,13 +95,60 @@ class ItemModel extends DataModel {
 				return [key, processedValue];
 			})
 			.reduce(entriesArrToObj, {});
+	processLimitations = (newLocalItemData) => {
+		const dataModel = this.getDataModel();
 
+		Object.entries({ ...newLocalItemData }).forEach(
+			([fieldName, newFieldValue]) => {
+				// if the field being updated is in the core data model
+				// 	if there are limitations for the field
+
+				if (dataModel[fieldName] && dataModel[fieldName].limitations) {
+					// process the limitation
+
+					const processLimitations = (limitations) =>
+						limitations.forEach((limitation) => {
+							const { field, value } = limitation;
+
+							// apply new value
+							newLocalItemData = {
+								...newLocalItemData,
+								[field]: value,
+							};
+						});
+
+					//
+
+					// if string, make array, so we can process all the limitations within an array
+					if (typeof newFieldValue === "string") {
+						newFieldValue = [newFieldValue];
+					}
+
+					// 	for each value selected
+					newFieldValue.forEach((newFieldVal) => {
+						// 	if there are limitations for that field's value
+						if (dataModel[fieldName].limitations[newFieldVal]) {
+							const limitations =
+								dataModel[fieldName].limitations[newFieldVal]
+									.limitations;
+
+							processLimitations(limitations);
+						}
+					});
+				}
+			}
+		);
+		return newLocalItemData;
+	};
+
+	//
 	// get the input model
 	getDataModel = () => ({
 		name: { label: "Name", name: "name", kind: "textField" },
 	});
 	getModelFields = () => this.getDataModel();
 
+	//
 	// table transformation
 	getTableHeaders = (tagData) => [
 		{ field: "order", headerName: "#" },
