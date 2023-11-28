@@ -5,19 +5,64 @@ import PromptsHome from "../views/pages/PromptsHome";
 import { v4 as uuidv4 } from "uuid";
 import PromptResults from "../views/shared/PromptResults";
 
+// table helper
+
+const generateRows = (list, headers) =>
+	Object.values(list).map((listItem) =>
+		headers.reduce(
+			(rowData, { field }) => ({
+				...rowData,
+				[field]: listItem[field],
+			}),
+			{}
+		)
+	);
+
+const entriesArrToObj = (processedData, [key, value]) => ({
+	...processedData,
+	[key]: value,
+});
+
+/////////////////////////////////////////////////////////////////////
+
+// ////
+// DataModel
+//
+//	grandparent
+class DataModel {
+	// properties
+	type = "generic";
+	label = "Generic";
+
+	getStorageKey = () => `writingPrompts-${this.type}`;
+}
+
 // ////
 // ItemModel
 //
 //	parent
 
-class ItemModel {
+class ItemModel extends DataModel {
 	// properties
-	label = "Generic";
-	type = "generic";
-	getStorageKey = () => `writingPrompts-${this.type}`;
+	uri = "#";
 
-	// init a new model
-	init = () => ({ id: uuidv4(), name: "" });
+	// init a new model (will not include order)
+	init = (itemDataModel = null) => ({
+		id: uuidv4(),
+
+		...Object.entries(itemDataModel ?? this.getDataModel())
+			.map(([key, input]) => {
+				const initValue = ["textField", "listField", "radio"].includes(
+					input.kind
+				)
+					? ""
+					: ["checkbox"].includes(input.kind)
+					? []
+					: "";
+				return [key, initValue];
+			})
+			.reduce(entriesArrToObj, {}),
+	});
 	initTags = (tagList) => ({
 		...Object.values(tagList)
 			.filter((tag) => tag.association === this.label)
@@ -41,13 +86,7 @@ class ItemModel {
 				const processedValue = this.processValue(key, value);
 				return [key, processedValue];
 			})
-			.reduce(
-				(processedData, [key, value]) => ({
-					...processedData,
-					[key]: value,
-				}),
-				{}
-			);
+			.reduce(entriesArrToObj, {});
 
 	// get the input model
 	getDataModel = () => ({
@@ -70,23 +109,12 @@ class ItemModel {
 	};
 }
 
-// table helper
-
-const generateRows = (list, headers) =>
-	Object.values(list).map((listItem) =>
-		headers.reduce(
-			(rowData, { field }) => ({
-				...rowData,
-				[field]: listItem[field],
-			}),
-			{}
-		)
-	);
+/////////////////////////////////////////////////////////////////////
 
 // ////
-// Models
+// Item Models
 //
-//	children
+// extends ItemModel (which extends DataModel)
 
 // //
 // PromptModel
@@ -99,9 +127,6 @@ export class PromptModel extends ItemModel {
 	}
 
 	homeElement = PromptsHome;
-
-	// override
-	init = () => ({ id: uuidv4(), category: "", prompts: "" });
 
 	// override
 	getDataModel = () => ({
@@ -133,15 +158,6 @@ export class TagModel extends ItemModel {
 	homeElement = TagsHome;
 
 	// override
-	init = () => ({
-		id: uuidv4(),
-		name: "",
-		options: "",
-		association: [],
-		relation: [],
-	});
-
-	// override
 	getDataModel = () => ({
 		name: { label: "Name", name: "name", kind: "textField" },
 		options: {
@@ -149,17 +165,27 @@ export class TagModel extends ItemModel {
 			name: "options",
 			kind: "listField",
 			processValue: (value) => {
-				console.log("options--- value: ", value);
+				// console.log("options--- value: ", value);
 				if (typeof value === "string") {
-					console.log("replacing");
+					// console.log("replacing");
 					value = value.replace(/,/gi, "\n");
 				}
+				return value;
 			},
+		},
+		inputType: {
+			label: "Input Type",
+			name: "inputType",
+			kind: "radio",
+			options: [
+				{ label: "Radios (single select)", value: "radio" },
+				{ label: "Checkboxes (multiple select)", value: "checkbox" },
+			],
 		},
 		association: {
 			label: "Association",
 			name: "association",
-			kind: "radio",
+			kind: "checkbox",
 			options: [
 				{ label: "Character", value: "Character" },
 				{ label: "Prompt", value: "Prompt" },
@@ -170,10 +196,11 @@ export class TagModel extends ItemModel {
 			],
 			limitations: {
 				None: {
-					type: "nullDataOnOptionSelect",
 					option: "None",
-					field: "relation",
-					value: "generator",
+					limitations: [
+						{ field: "association", value: ["None"] },
+						{ field: "relation", value: "generator" },
+					],
 				},
 			},
 		},
@@ -190,16 +217,17 @@ export class TagModel extends ItemModel {
 }
 
 // ////
-// ////
+// DataModels
+//
+// extends DataModel
+
 // ////
 // GeneratorModel
-export class GeneratorModel extends ItemModel {
+export class GeneratorModel extends DataModel {
 	constructor() {
 		super();
 		this.type = "generator";
 		this.label = "Generator";
 		this.uri = "#";
 	}
-
-	homeElement = PromptResults;
 }

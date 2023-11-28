@@ -8,7 +8,7 @@ import MUIRadios from "../../inputs/MUIRadios";
 
 export default function ListItemView({
 	model,
-	tagList,
+	tagList = null,
 
 	itemData,
 	handleUpdateItem,
@@ -40,19 +40,52 @@ export default function ListItemView({
 			...localItemData,
 			[name]: model.processValue(name, value),
 		};
+		console.log("--handleChange-- newLocalItemData: ", newLocalItemData);
 
 		// update the limitations
-		Object.entries(newLocalItemData).forEach(([name, value]) => {
-			if (dataModel[name])
-				if (dataModel[name].limitations)
-					if (dataModel[name].limitations[value]) {
-						const limitOp = dataModel[name].limitations[value];
-						newLocalItemData = {
-							...newLocalItemData,
-							[limitOp.field]: limitOp.value,
-						};
+		Object.entries({ ...newLocalItemData }).forEach(
+			([fieldName, newFieldValue]) => {
+				// if the field being updated is in the core data model
+				// 	if there are limitations for the field
+
+				if (dataModel[fieldName] && dataModel[fieldName].limitations) {
+					console.log("-limitation-");
+
+					// process the limitation
+
+					const processLimitations = (limitations) =>
+						limitations.forEach((limitation) => {
+							const { field, value } = limitation;
+							console.log("limitation: ", limitation);
+
+							// apply new value
+							newLocalItemData = {
+								...newLocalItemData,
+								[field]: value,
+							};
+						});
+
+					//
+
+					// if string, make array, so we can process all the limitations within an array
+					if (typeof newFieldValue === "string") {
+						newFieldValue = [newFieldValue];
 					}
-		});
+
+					// 	for each value selected
+					newFieldValue.forEach((newFieldVal) => {
+						// 	if there are limitations for that field's value
+						if (dataModel[fieldName].limitations[newFieldVal]) {
+							const limitations =
+								dataModel[fieldName].limitations[newFieldVal]
+									.limitations;
+
+							processLimitations(limitations);
+						}
+					});
+				}
+			}
+		);
 
 		setLocalItemData(newLocalItemData);
 	};
@@ -65,6 +98,17 @@ export default function ListItemView({
 		handleDeleteItem(localItemData);
 	};
 
+	// components
+	let itemEditingSections = [
+		{ section: model.label, modelInit: model.init() },
+	];
+	if (tagList !== null) {
+		itemEditingSections.push({
+			section: "Tags",
+			modelInit: model.initTags(tagList),
+		});
+	}
+
 	// render
 
 	if (!localItemData || !modelFields) return <></>;
@@ -76,18 +120,13 @@ export default function ListItemView({
 				"> *": {
 					borderLeft: "1px solid #ddd",
 				},
-				"> *:first-child, > *:last-child": { border: 0 },
+				"> *:first-of-type, > *:last-of-type": { border: 0 },
 			}}
 		>
 			{localItemData.order ? <Box>{localItemData.order}</Box> : <></>}
 
-			{[
-				{ section: model.label, modelInit: model.init() },
-				tagList
-					? { section: "Tags", modelInit: model.initTags(tagList) }
-					: null,
-			].map(({ section, modelInit }, i) => (
-				<Box sx={{ flex: i === 0 ? 2 : 1 }}>
+			{itemEditingSections.map(({ section, modelInit }, i) => (
+				<Box sx={{ flex: i === 0 ? 2 : 1 }} key={i}>
 					<Box className="listItem">
 						{Object.keys(modelInit).map((name, i) => {
 							if (["id", "order"].includes(name))

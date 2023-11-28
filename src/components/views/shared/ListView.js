@@ -5,7 +5,7 @@ import ListItemView from "./ListItemView";
 export default function ListView({
 	model,
 	list,
-	tagList,
+	tagList = null,
 	handleUpdateItem,
 	handleDeleteItem,
 }) {
