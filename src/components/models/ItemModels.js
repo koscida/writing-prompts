@@ -9,17 +9,6 @@ import PromptResults from "../views/shared/PromptResults";
 
 // table helper
 
-const generateRows = (list, headers) =>
-	Object.values(list).map((listItem) =>
-		headers.reduce(
-			(rowData, { field }) => ({
-				...rowData,
-				[field]: listItem[field],
-			}),
-			{}
-		)
-	);
-
 const entriesArrToObj = (processedData, [key, value]) => ({
 	...processedData,
 	[key]: value,
@@ -73,8 +62,8 @@ class ItemModel extends DataModel {
 					tag.association === this.label ||
 					tag.association.includes(this.label)
 			)
-			.map((tag) => [tag.name, []])
-			.reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {}),
+			.map((tag) => [tag.name, tag.inputType === "radio" ? "" : []])
+			.reduce(entriesArrToObj, {}),
 	});
 	initWithTags = (tagList) => ({
 		...this.init(),
@@ -150,17 +139,32 @@ class ItemModel extends DataModel {
 
 	//
 	// table transformation
-	getTableHeaders = (tagData) => [
-		{ field: "order", headerName: "#" },
+	getSimpleTableHeaders = (tagData) => [
 		...Object.values(this.getDataModel()).map((dataRow) => ({
 			field: dataRow.name,
 			headerName: dataRow.label,
 		})),
 		...tagData.map((tag) => ({ field: tag, headerName: tag })),
 	];
+	getTableHeaders = (tagData) => [
+		{ field: "order", headerName: "#" },
+		...this.getSimpleTableHeaders(tagData),
+	];
+	getTableRows = (list, headers) =>
+		Object.values(list)
+			.map((listItem) =>
+				headers.reduce(
+					(rowData, { field }) => ({
+						...rowData,
+						[field]: listItem[field],
+					}),
+					{}
+				)
+			)
+			.sort((a, b) => a.order > b.order);
 	transformToTableData = (listData, tagData = []) => {
 		const tableHeaders = this.getTableHeaders(tagData);
-		return [tableHeaders, generateRows(listData, tableHeaders)];
+		return [tableHeaders, this.getTableRows(listData, tableHeaders)];
 	};
 }
 

@@ -32,7 +32,7 @@ export default function MUIDenseTable({ columns, rows }) {
 					border-bottom: 1px solid rgb(224, 224, 224);
 					font-size: 0.875rem;
 					line-height: 1.25rem;
-					padding: 6px 16px;
+					padding: 4px 8px;
 					color: rgba(0, 0, 0, 0.87);
 					display: table-cell;
   					vertical-align: inherit;

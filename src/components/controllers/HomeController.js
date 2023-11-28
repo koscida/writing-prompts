@@ -24,23 +24,13 @@ export default function HomeController() {
 	const [promptList] = useLocalStorage(promptModel.getStorageKey(), {});
 	const [tagList] = useLocalStorage(tagModel.getStorageKey(), {});
 
-	// prompt generator
-	const [generatedPrompts, setGeneratedPrompts] = useLocalStorage(
-		generatorModel.getStorageKey(),
-		{}
-	);
-
 	// ////
 	// process data
 
 	// tag data
-	const getTags = (tagAssociation) =>
-		Object.values(tagList)
-			.filter((tag) => tag.association === tagAssociation)
-			.reduce((tags, tag) => [...tags, tag.name], []);
-	const characterTags = getTags("Character");
-	const promptTags = getTags("Prompt");
-	console.log("characterTags: ", characterTags, ", promptTags: ", promptTags);
+	const characterTags = Object.keys(characterModel.initTags(tagList));
+	const promptTags = Object.keys(promptModel.initTags(tagList));
+	// console.log("characterTags: ", characterTags, ", promptTags: ", promptTags);
 
 	// get table data
 	const characterTableData = characterModel.transformToTableData(
@@ -61,9 +51,12 @@ export default function HomeController() {
 	const promptGenerator = (
 		<PromptGenerator
 			generatorModel={generatorModel}
-			characterList={characterList}
+			promptModel={promptModel}
 			promptList={promptList}
+			characterModel={characterModel}
+			characterList={characterList}
 			tagList={tagList}
+			tagModel={tagModel}
 		/>
 	);
 

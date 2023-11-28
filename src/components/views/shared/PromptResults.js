@@ -8,12 +8,16 @@ import {
 } from "@mui/material";
 import React from "react";
 import MUIButton from "../../inputs/MUIButton";
+import MUIDenseTable from "../../inputs/MUIDenseTable";
 
 export default function PromptResults({
 	promptResults,
 	handleSaveResults,
 	handleGenerateNewResults,
 }) {
+	const createKeysFromResults = (keys) =>
+		keys.map((key) => ({ field: key, headerName: key }));
+
 	return (
 		<>
 			<style>{`
@@ -44,42 +48,38 @@ export default function PromptResults({
 					"> *:last-child": { flex: "1", marginRight: 0 },
 				}}
 			>
-				<Paper className="promptSection">
+				<Box className="promptSection">
 					<h3>Prompts</h3>
 
-					<List>
-						{promptResults.prompts.map((promptResult) => (
-							<ListItem key={promptResult.id}>
-								{promptResult.category} &mdash;{" "}
-								{promptResult.prompt}
-							</ListItem>
-						))}
-					</List>
-				</Paper>
+					<MUIDenseTable
+						columns={createKeysFromResults(
+							Object.keys(promptResults.prompts[0])
+						)}
+						rows={promptResults.prompts}
+					/>
+				</Box>
 
-				<Paper className="promptSection">
+				<Box className="promptSection">
 					<h3>Characters</h3>
 
-					<List>
-						{promptResults.characters.map((promptResult) => (
-							<ListItem key={promptResult.id}>
-								{promptResult.name}
-							</ListItem>
-						))}
-					</List>
-				</Paper>
+					<MUIDenseTable
+						columns={createKeysFromResults(
+							Object.keys(promptResults.characters[0])
+						)}
+						rows={promptResults.characters}
+					/>
+				</Box>
 
-				<Paper className="promptSection">
+				<Box className="promptSection">
 					<h3>Tags</h3>
 
-					<List>
-						{promptResults.tags.map((promptResult) => (
-							<ListItem key={promptResult.id}>
-								{promptResult.name}: {promptResult.value}
-							</ListItem>
-						))}
-					</List>
-				</Paper>
+					<MUIDenseTable
+						columns={createKeysFromResults(
+							Object.keys(promptResults.tags[0])
+						)}
+						rows={promptResults.tags}
+					/>
+				</Box>
 			</Box>
 			<Box className="flexRow">
 				<MUIButton
