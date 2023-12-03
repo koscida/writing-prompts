@@ -15,7 +15,12 @@ export default function Home({
 	// render
 	return (
 		<Box className="page">
-			<Paper>{promptGenerator}</Paper>
+			<Paper>
+				<Box>
+					<h2>Results</h2>
+				</Box>
+				{promptGenerator}
+			</Paper>
 
 			<Divider />
 

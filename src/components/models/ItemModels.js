@@ -3,7 +3,7 @@ import CharactersHome from "../views/pages/CharactersHome";
 import TagsHome from "../views/pages/TagsHome";
 import PromptsHome from "../views/pages/PromptsHome";
 import { v4 as uuidv4 } from "uuid";
-import PromptResults from "../views/shared/PromptResults";
+import ResultsHome from "../views/pages/ResultsHome";
 
 /////////////////////////////////////////////////////////////////////
 
@@ -281,12 +281,25 @@ export class TagModel extends ItemModel {
 // extends DataModel
 
 // ////
-// GeneratorModel
-export class GeneratorModel extends DataModel {
+// ResultsModel
+export class ResultsModel extends ItemModel {
 	constructor() {
 		super();
-		this.type = "generator";
-		this.label = "Generator";
-		this.uri = "#";
+		this.type = "result";
+		this.label = "Result";
+		this.uri = "/results";
 	}
+
+	homeElement = ResultsHome;
+
+	// override
+	getDataModel = () => ({
+		prompts: { label: "Prompts", name: "prompts", kind: "checkbox" },
+		characters: {
+			label: "Characters",
+			name: "characters",
+			kind: "checkbox",
+		},
+		tags: { label: "Tags", name: "tags", kind: "checkbox" },
+	});
 }

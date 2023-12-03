@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import useLocalStorage from "../data/useLocalStorage";
 
-export default function ItemFactory({ model, tagModel = null, view }) {
+export default function ItemFactory({
+	newItem = null,
+	model,
+	tagModel = null,
+	view,
+}) {
 	// ////
 	// variables
 
@@ -120,6 +125,7 @@ export default function ItemFactory({ model, tagModel = null, view }) {
 				model={model}
 				list={list}
 				tagList={tagList}
+				newItem={newItem}
 				handleAddItem={handleAddItem}
 				handleUpdateItem={handleUpdateItem}
 				handleDeleteItem={handleDeleteItem}

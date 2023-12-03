@@ -12,8 +12,8 @@ import MUIDenseTable from "../../inputs/MUIDenseTable";
 
 export default function PromptResults({
 	promptResults,
-	handleSaveResults,
 	handleGenerateNewResults,
+	handleAddResult,
 }) {
 	const createKeysFromResults = (keys) =>
 		keys.map((key) => ({ field: key, headerName: key }));
@@ -36,9 +36,7 @@ export default function PromptResults({
 				}
 			}
 			`}</style>
-			<Box>
-				<h2>Results</h2>
-			</Box>
+
 			<Box
 				sx={{
 					display: "flex",
@@ -81,13 +79,20 @@ export default function PromptResults({
 					/>
 				</Box>
 			</Box>
-			<Box className="flexRow">
-				<MUIButton
-					label={"Generate New Results"}
-					onClick={handleGenerateNewResults}
-				/>
-				<MUIButton label={"Save Results"} onClick={handleSaveResults} />
-			</Box>
+			{handleGenerateNewResults && handleAddResult ? (
+				<Box className="flexRow">
+					<MUIButton
+						label={"Generate New Results"}
+						onClick={handleGenerateNewResults}
+					/>
+					<MUIButton
+						label={"Save Results"}
+						onClick={handleAddResult}
+					/>
+				</Box>
+			) : (
+				<></>
+			)}
 		</>
 	);
 }

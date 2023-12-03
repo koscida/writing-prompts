@@ -1,9 +1,10 @@
 import React from "react";
 import useLocalStorage from "../data/useLocalStorage";
 import PromptResults from "../views/shared/PromptResults";
+import ItemFactory from "../models/ItemFactory";
 
 export default function PromptGenerator({
-	generatorModel,
+	resultsModel,
 	promptModel,
 	promptList,
 	characterModel,
@@ -13,9 +14,10 @@ export default function PromptGenerator({
 }) {
 	// prompt generator
 	const [generatedPrompts, setGeneratedPrompts] = useLocalStorage(
-		generatorModel.getStorageKey(),
+		resultsModel.getStorageKey(),
 		{}
 	);
+	const generatedPromptsEntries = Object.entries(generatedPrompts);
 
 	// re-store tags
 	const tagListByName = Object.values(tagList).reduce(
@@ -25,14 +27,6 @@ export default function PromptGenerator({
 	// get tags
 	const characterTags = Object.keys(characterModel.initTags(tagList));
 	const promptTags = Object.keys(promptModel.initTags(tagList));
-	console.log(
-		"tagListByName: ",
-		tagListByName,
-		" characterTags: ",
-		characterTags,
-		" promptTags: ",
-		promptTags
-	);
 
 	// ////
 	// generator
@@ -151,14 +145,27 @@ export default function PromptGenerator({
 		characters,
 		tags,
 	};
-	console.log("promptResults: ", promptResults);
+	// console.log("promptResults: ", promptResults);
 
 	// ////
 
 	// ////
 	// results handlers
 
-	const handleSaveResults = () => {};
+	const handleAddResult = () => {
+		// set the order to be at the last element
+		promptResults["order"] = generatedPromptsEntries.length + 1;
+
+		// set the id to be random
+		promptResults["id"] = promptModel.init()["id"];
+
+		// save
+		console.log("--handleAddResult-- result: ", promptResults);
+		setGeneratedPrompts({
+			...generatedPrompts,
+			[promptResults.id]: promptResults,
+		});
+	};
 	const handleGenerateNewResults = () => {
 		setGeneratedPrompts({ ...generatedPrompts });
 	};
@@ -167,10 +174,12 @@ export default function PromptGenerator({
 	// render
 
 	return (
-		<PromptResults
-			promptResults={promptResults}
-			handleSaveResults={handleSaveResults}
-			handleGenerateNewResults={handleGenerateNewResults}
-		/>
+		<>
+			<PromptResults
+				promptResults={promptResults}
+				handleGenerateNewResults={handleGenerateNewResults}
+				handleAddResult={handleAddResult}
+			/>
+		</>
 	);
 }

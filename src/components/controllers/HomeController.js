@@ -3,7 +3,7 @@ import {
 	CharacterModel,
 	PromptModel,
 	TagModel,
-	GeneratorModel,
+	ResultsModel,
 } from "../models/ItemModels";
 import Home from "../views/pages/Home";
 import PromptGenerator from "./PromptGenerator";
@@ -17,7 +17,7 @@ export default function HomeController() {
 	const characterModel = new CharacterModel();
 	const promptModel = new PromptModel();
 	const tagModel = new TagModel();
-	const generatorModel = new GeneratorModel();
+	const resultsModel = new ResultsModel();
 
 	// local data (read-only)
 	const [characterList] = useLocalStorage(characterModel.getStorageKey(), {});
@@ -50,7 +50,7 @@ export default function HomeController() {
 
 	const promptGenerator = (
 		<PromptGenerator
-			generatorModel={generatorModel}
+			resultsModel={resultsModel}
 			promptModel={promptModel}
 			promptList={promptList}
 			characterModel={characterModel}
