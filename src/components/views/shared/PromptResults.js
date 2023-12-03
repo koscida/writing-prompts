@@ -15,6 +15,7 @@ export default function PromptResults({
 	handleGenerateNewResults,
 	handleAddResult,
 }) {
+	console.log("promptResults: ", promptResults);
 	const createKeysFromResults = (keys) =>
 		keys.map((key) => ({ field: key, headerName: key }));
 
@@ -49,34 +50,46 @@ export default function PromptResults({
 				<Box className="promptSection">
 					<h3>Prompts</h3>
 
-					<MUIDenseTable
-						columns={createKeysFromResults(
-							Object.keys(promptResults.prompts[0])
-						)}
-						rows={promptResults.prompts}
-					/>
+					{promptResults.prompts.length > 0 ? (
+						<MUIDenseTable
+							columns={createKeysFromResults(
+								Object.keys(promptResults.prompts[0])
+							)}
+							rows={promptResults.prompts}
+						/>
+					) : (
+						<></>
+					)}
 				</Box>
 
 				<Box className="promptSection">
 					<h3>Characters</h3>
 
-					<MUIDenseTable
-						columns={createKeysFromResults(
-							Object.keys(promptResults.characters[0])
-						)}
-						rows={promptResults.characters}
-					/>
+					{promptResults.characters.length > 0 ? (
+						<MUIDenseTable
+							columns={createKeysFromResults(
+								Object.keys(promptResults.characters[0])
+							)}
+							rows={promptResults.characters}
+						/>
+					) : (
+						<></>
+					)}
 				</Box>
 
 				<Box className="promptSection">
 					<h3>Tags</h3>
 
-					<MUIDenseTable
-						columns={createKeysFromResults(
-							Object.keys(promptResults.tags[0])
-						)}
-						rows={promptResults.tags}
-					/>
+					{promptResults.tags.length > 0 ? (
+						<MUIDenseTable
+							columns={createKeysFromResults(
+								Object.keys(promptResults.tags[0])
+							)}
+							rows={promptResults.tags}
+						/>
+					) : (
+						<></>
+					)}
 				</Box>
 			</Box>
 			{handleGenerateNewResults && handleAddResult ? (
